@@ -1,0 +1,15 @@
+﻿@model projectUpload.Models.Project
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add Projects</h2>
+@ using (Html.BeginForm("Upload", "Upload", FormMethod.Post, new { enctype="multipart/form-data" }))
+    { 
+
+  Select a file: <input type="file" name="fileUpload" />
+<input type="submit" value="Upload" />
+
+
+

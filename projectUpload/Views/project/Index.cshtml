@@ -1,0 +1,17 @@
+﻿@model IEnumerable<projectUpload.Models.Project>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<p>
+    @Html.ActionLink("Add Project", "New")
+</p>
+<h2>Projects</h2>
+<ul>
+    @foreach (var project in Model)
+    {
+
+        <li>@project.Title (@project.Title)</li>
+    }
+</ul>
+
