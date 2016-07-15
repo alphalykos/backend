@@ -9,25 +9,20 @@ namespace projectUpload.Controllers
 {
     public class projectController : Controller
     {
-        private ApplicationDbContext _dbContext;
-
-        public projectController()
-        {
-            _dbContext = new ApplicationDbContext();
-        }
-
+        private ApplicationDbContext _dbContext = new ApplicationDbContext();
+        
         // GET: Videos
         public ActionResult Index()
         {
-            var projects = _dbContext.Projects.ToList();
-
+            var projects = _dbContext.Project.ToList();
             return View(projects);
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(Project project)
+        public ActionResult Create(Project project)
         {
-            var projects = _dbContext.Projects.ToList();
+            var projects = _dbContext.Project.ToList();
             var validImageTypes = new string[]
                 {
                     "image/gif",
@@ -47,24 +42,21 @@ namespace projectUpload.Controllers
 
                 if (ModelState.IsValid)
                 {
-                var image = new Project
-                {
-                    title = project.Title,
-                    description = project.Description,
+                    var image = new Project();
+                    image.title = project.Title,
+                    image.description = project.Description,
 
-                };
-            
-        if (project.Image != null && project.Image.ContentLength > 0)
+                    if (project.Image != null && project.Image.ContentLength > 0)
                     {
-                    var uploadDir = "~/uploads";
-            var imagePath = Path.Combine(Server.MapPath(uploadDir), project.Image.FileName);
+                        var uploadDir = "~/uploads";
+                        var imagePath = Path.Combine(Server.MapPath(uploadDir), project.Image.FileName);
                         var imageUrl = Path.Combine(uploadDir, project.Image.FileName);
                         project.Image.SaveAs(imagePath);
                         image.ImageUrl = imageUrl;
                     }
 
-                _dbContext.Add(image);
-                _dbContext.SaveChanges();
+                    _dbContext.Project.Add(image);
+                    _dbContext.SaveChanges();
                     return RedirectToAction("Index");
                 }
 
@@ -90,7 +82,7 @@ namespace projectUpload.Controllers
     }
     public ActionResult Update(Project project)
         {
-            var projectInDb = _dbContext.Projects.SingleOrDefault(v => v.ID == project.ID);
+            var projectInDb = _dbContext.Project.SingleOrDefault(v => v.ID == project.ID);
 
             if (projectInDb == null)
                 return HttpNotFound();
